@@ -15,9 +15,11 @@ class ElementAttribute {
 }
 
 class Component {
-	constructor(renderHookId) {
+	constructor(renderHookId, shouldRender = true) {
 		this.hookID = renderHookId;
-		this.render();
+		if (shouldRender) {
+			this.render();
+		}
 	}
 
 	render() {}
@@ -77,8 +79,9 @@ class ShoppingCart extends Component {
 
 class ProductItem extends Component {
 	constructor(product, renderHookId) {
-		super(renderHookId);
+		super(renderHookId, false);
 		this.product = product;
+		this.render();
 	}
 
 	addToCart() {
@@ -104,32 +107,43 @@ class ProductItem extends Component {
 }
 
 class ProductList extends Component {
-	products = [
-		new Product(
-			'A Robot',
-			'https://images.unsplash.com/photo-1494390248081-4e521a5940db?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60',
-			'A swift and ingenious machine that has the ability to learn.',
-			44.99
-		),
-		new Product(
-			'A Bunch of Cherries',
-			'https://images.unsplash.com/photo-1547394765-185e1e68f34e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60',
-			'Delicious and nutritive fruit plate.',
-			77.99
-		),
-	];
+	products = [];
 
 	constructor(renderHookId) {
 		super(renderHookId);
+		this.fetchProducts();
+	}
+
+	fetchProducts() {
+		this.products = [
+			new Product(
+				'A Robot',
+				'https://images.unsplash.com/photo-1494390248081-4e521a5940db?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60',
+				'A swift and ingenious machine that has the ability to learn.',
+				44.99
+			),
+			new Product(
+				'A Bunch of Cherries',
+				'https://images.unsplash.com/photo-1547394765-185e1e68f34e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60',
+				'Delicious and nutritive fruit plate.',
+				77.99
+			),
+		];
+		this.renderProducts();
+	}
+
+	renderProducts() {
+		for (const prod of this.products) {
+			new ProductItem(prod, 'prod-list');
+		}
 	}
 
 	render() {
-		const prodList = this.createRootElement('ul', 'product-list', [
+		this.createRootElement('ul', 'product-list', [
 			new ElementAttribute('id', 'prod-list'),
 		]);
-
-		for (const prod of this.products) {
-			new ProductItem(prod, 'prod-list');
+		if (this.products && this.products.length > 0) {
+			this.renderProducts();
 		}
 	}
 }
