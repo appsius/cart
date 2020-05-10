@@ -1,9 +1,4 @@
 class Product {
-	// title = 'DEFAULT';
-	// imageURL;
-	// description;
-	// price;
-
 	constructor(title, image, desc, price) {
 		this.title = title;
 		this.imageURL = image;
@@ -12,7 +7,34 @@ class Product {
 	}
 }
 
-class ShoppingCart {
+class ElementAttribute {
+	constructor(attrName, attrValue) {
+		this.name = attrName;
+		this.value = attrValue;
+	}
+}
+
+class Component {
+	constructor(renderHookId) {
+		this.hookID = renderHookId;
+	}
+
+	createRootElement(tag, cssClasses, attributes) {
+		const rootElement = document.createElement(tag);
+		if (cssClasses) {
+			rootElement.className = cssClasses;
+		}
+		if (attributes && attributes.length > 0) {
+			for (let attr of attributes) {
+				rootElement.setAttribute(attr.name, attr.value);
+			}
+		}
+		document.getElementById(this.hookID).append(rootElement);
+		return rootElement;
+	}
+}
+
+class ShoppingCart extends Component {
 	items = [];
 
 	set cartItems(value) {
@@ -30,6 +52,10 @@ class ShoppingCart {
 		return sum;
 	}
 
+	constructor(renderHookId) {
+		super(renderHookId);
+	}
+
 	addProduct(product) {
 		const updatedItems = [...this.items];
 		updatedItems.push(product);
@@ -37,16 +63,12 @@ class ShoppingCart {
 	}
 
 	render() {
-		const cartEl = document.createElement('section');
-		cartEl.className = 'cart';
-
+		const cartEl = this.createRootElement('section', 'cart');
 		cartEl.innerHTML = `	
 			<h2>Total: \$${0}</h2>
 			<button>Order Now!</button>
 		`;
-
 		this.totalOutput = cartEl.querySelector('h2');
-		return cartEl;
 	}
 }
 
@@ -95,12 +117,9 @@ class ProductList {
 		),
 	];
 
-	constructor() {}
-
 	render() {
 		const prodList = document.createElement('ul');
 		prodList.className = 'product-list';
-
 		for (const prod of this.products) {
 			const productItem = new ProductItem(prod);
 			const prodEl = productItem.render();
@@ -113,12 +132,12 @@ class ProductList {
 class Shop {
 	render() {
 		const renderHook = document.getElementById('app');
-		this.cart = new ShoppingCart();
-		const cartEl = this.cart.render();
+
+		this.cart = new ShoppingCart('app');
+		this.cart.render();
 		const productList = new ProductList();
 		const prodListEl = productList.render();
 
-		renderHook.append(cartEl);
 		renderHook.append(prodListEl);
 	}
 }
