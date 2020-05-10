@@ -3,27 +3,29 @@ class Product {
 	imageURL;
 	description;
 	price;
-}
 
-console.log(new Product());
+	constructor(title, image, desc, price) {
+		this.title = title;
+		this.imageURL = image;
+		this.description = desc;
+		this.price = price;
+	}
+}
 
 const productList = {
 	products: [
-		{
-			title: 'A Robot',
-			imageURL:
-				'https://images.unsplash.com/photo-1563207153-f403bf289096?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60',
-			price: 10.99,
-			description:
-				'A swift and ingenious machine that has the ability to learn.',
-		},
-		{
-			title: 'A Bunch of Cherries',
-			imageURL:
-				'https://images.unsplash.com/photo-1580926608062-464f40bdcec2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60',
-			price: 3.99,
-			description: 'Delicious and nutritive fruit plate.',
-		},
+		new Product(
+			'A Robot',
+			'https://images.unsplash.com/photo-1563207153-f403bf289096?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60',
+			'A swift and ingenious machine that has the ability to learn.',
+			44.99
+		),
+		new Product(
+			'A Bunch of Cherries',
+			'https://images.unsplash.com/photo-1580926608062-464f40bdcec2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60',
+			'Delicious and nutritive fruit plate.',
+			77.99
+		),
 	],
 	render() {
 		const renderHook = document.getElementById('app');
